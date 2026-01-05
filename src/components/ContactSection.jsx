@@ -1,12 +1,7 @@
 import { FaGithub, FaLinkedin } from "react-icons/fa";
 import { SiLeetcode, SiGeeksforgeeks } from "react-icons/si";
-
-import {
-  Mail,
-  MapPin,
-  Phone,
-  Send,
-} from "lucide-react";
+import emailjs from "@emailjs/browser";
+import { Mail, MapPin, Phone, Send } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useToast } from "@/hooks/use-toast";
 import { useState } from "react";
@@ -17,23 +12,45 @@ export const ContactSection = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-
     setIsSubmitting(true);
 
-    setTimeout(() => {
-      toast({
-        title: "Message sent!",
-        description: "Thank you for your message. I'll get back to you soon.",
-      });
-      setIsSubmitting(false);
-    }, 1500);
+    emailjs
+      .send(
+        import.meta.env.VITE_EMAILJS_SERVICE_ID,
+        import.meta.env.VITE_EMAILJS_TEMPLATE_ID,
+        {
+          name: e.target.name.value,
+          email: e.target.email.value,
+          message: e.target.message.value,
+        },
+        import.meta.env.VITE_EMAILJS_PUBLIC_KEY
+      )
+      .then(
+        () => {
+          toast({
+            title: "Message sent!",
+            description: "Thank you for your message. I'll get back to you soon.",
+          });
+          setIsSubmitting(false);
+          e.target.reset();
+        },
+        (error) => {
+          toast({
+            title: "Failed to send",
+            description: "Something went wrong. Please try again later.",
+            variant: "destructive",
+          });
+          console.error("EmailJS Error:", error);
+          setIsSubmitting(false);
+        }
+      );
   };
 
   return (
-    <section id="contact" className="py-24 px-4 relative bg-secondary/30">
+    <section id="contact" className="py-24 px-4 bg-secondary/30">
       <div className="container mx-auto max-w-5xl">
         <h2 className="text-3xl md:text-4xl font-bold mb-4 text-center">
-          Get In <span className="text-primary"> Touch</span>
+          Get In <span className="text-primary">Touch</span>
         </h2>
 
         <p className="text-center text-muted-foreground mb-12 max-w-2xl mx-auto">
@@ -42,7 +59,7 @@ export const ContactSection = () => {
         </p>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
-          {/* Contact Info */}
+          {/* CONTACT INFO */}
           <div className="space-y-8">
             <h3 className="text-2xl font-semibold mb-6">
               Contact Information
@@ -57,7 +74,7 @@ export const ContactSection = () => {
                   <h4 className="font-medium">Email</h4>
                   <a
                     href="mailto:ankush321nayak@gmail.com"
-                    className="text-muted-foreground hover:text-primary transition-colors"
+                    className="text-muted-foreground hover:text-primary"
                   >
                     ankush321nayak@gmail.com
                   </a>
@@ -72,7 +89,7 @@ export const ContactSection = () => {
                   <h4 className="font-medium">Phone</h4>
                   <a
                     href="tel:+918602406003"
-                    className="text-muted-foreground hover:text-primary transition-colors"
+                    className="text-muted-foreground hover:text-primary"
                   >
                     +91 86024 06003
                   </a>
@@ -85,22 +102,24 @@ export const ContactSection = () => {
                 </div>
                 <div>
                   <h4 className="font-medium">Location</h4>
-                  <p className="text-muted-foreground hover:text-primary transition-colors">
+                  <p className="text-muted-foreground">
                     NIT Bhopal, Madhya Pradesh, India
                   </p>
                 </div>
               </div>
             </div>
 
-            {/* Social Links */}
+            {/* SOCIAL LINKS */}
             <div className="pt-10">
-              <h4 className="font-medium mb-4 text-center">Connect With Me</h4>
-              <div className="flex justify-center gap-6 text-muted-foreground text-2xl">
+              <h4 className="font-medium mb-4 text-center">
+                Connect With Me
+              </h4>
+              <div className="flex justify-center gap-6 text-2xl text-muted-foreground">
                 <a
                   href="https://www.linkedin.com/in/ankush-nayak-806473259/"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="hover:text-primary transition-colors"
+                  className="hover:text-primary"
                 >
                   <FaLinkedin />
                 </a>
@@ -109,7 +128,7 @@ export const ContactSection = () => {
                   href="https://github.com/Ankush2213"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="hover:text-primary transition-colors"
+                  className="hover:text-primary"
                 >
                   <FaGithub />
                 </a>
@@ -118,7 +137,7 @@ export const ContactSection = () => {
                   href="https://leetcode.com/u/Ankush2213/"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="hover:text-primary transition-colors"
+                  className="hover:text-primary"
                 >
                   <SiLeetcode />
                 </a>
@@ -127,7 +146,7 @@ export const ContactSection = () => {
                   href="https://www.geeksforgeeks.org/user/ankush32kc77/"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="hover:text-primary transition-colors"
+                  className="hover:text-primary"
                 >
                   <SiGeeksforgeeks />
                 </a>
@@ -135,19 +154,18 @@ export const ContactSection = () => {
             </div>
           </div>
 
-          {/* Contact Form */}
-          <div
+          {/* CONTACT FORM */}
+          <form
             className="bg-card p-8 rounded-lg shadow-xs"
             onSubmit={handleSubmit}
           >
-            <h3 className="text-2xl font-semibold mb-6">Send a Message</h3>
+            <h3 className="text-2xl font-semibold mb-6">
+              Send a Message
+            </h3>
 
-            <form className="space-y-6">
+            <div className="space-y-6">
               <div>
-                <label
-                  htmlFor="name"
-                  className="block text-sm font-medium mb-2"
-                >
+                <label htmlFor="name" className="block text-sm font-medium mb-2">
                   Your Name
                 </label>
                 <input
@@ -155,16 +173,12 @@ export const ContactSection = () => {
                   id="name"
                   name="name"
                   required
-                  className="w-full px-4 py-3 rounded-md border border-input bg-background focus:outline-hidden focus:ring-2 focus:ring-primary"
-                  placeholder="Ankush Nayak ..."
+                  className="w-full px-4 py-3 rounded-md border border-input bg-background focus:ring-2 focus:ring-primary"
                 />
               </div>
 
               <div>
-                <label
-                  htmlFor="email"
-                  className="block text-sm font-medium mb-2"
-                >
+                <label htmlFor="email" className="block text-sm font-medium mb-2">
                   Your Email
                 </label>
                 <input
@@ -172,24 +186,19 @@ export const ContactSection = () => {
                   id="email"
                   name="email"
                   required
-                  className="w-full px-4 py-3 rounded-md border border-input bg-background focus:outline-hidden focus:ring-2 focus:ring-primary"
-                  placeholder="ankush@gmail.com"
+                  className="w-full px-4 py-3 rounded-md border border-input bg-background focus:ring-2 focus:ring-primary"
                 />
               </div>
 
               <div>
-                <label
-                  htmlFor="message"
-                  className="block text-sm font-medium mb-2"
-                >
+                <label htmlFor="message" className="block text-sm font-medium mb-2">
                   Your Message
                 </label>
                 <textarea
                   id="message"
                   name="message"
                   required
-                  className="w-full px-4 py-3 rounded-md border border-input bg-background focus:outline-hidden focus:ring-2 focus:ring-primary resize-none"
-                  placeholder="Hello, I'd like to talk about..."
+                  className="w-full px-4 py-3 rounded-md border border-input bg-background resize-none focus:ring-2 focus:ring-primary"
                 />
               </div>
 
@@ -203,8 +212,8 @@ export const ContactSection = () => {
                 {isSubmitting ? "Sending..." : "Send Message"}
                 <Send size={16} />
               </button>
-            </form>
-          </div>
+            </div>
+          </form>
         </div>
       </div>
     </section>
