@@ -1,14 +1,19 @@
 import { Navbar } from "../components/Navbar";
-import { StarBackground } from "@/components/StarBackground";
+
+
+
+
+
+import { StarBackground } from "../components/StarBackground";
 import { ThemeToggle } from "../components/ThemeToggle";
 import { HeroSection } from "../components/HeroSection";
+import { AboutSection } from "../components/AboutSection";
 import { SkillsSection } from "../components/SkillsSection";
+import { HobbiesSection } from "../components/HobbiesSection";
 import { ProjectsSection } from "../components/ProjectsSection";
 import { ContactSection } from "../components/ContactSection";
+import { SignatureSection } from "../components/SignatureSection";
 import { Footer } from "../components/Footer";
-import { AboutSection } from "../components/AboutSection";
-
-
 
 
 export const Home = () => {
@@ -22,13 +27,18 @@ export const Home = () => {
         <HeroSection />
         <AboutSection />
         <SkillsSection />
+
+      
+      
+
+        <HobbiesSection />
         <ProjectsSection />
         <ContactSection />
-          
-          
+        <SignatureSection />
       </main>
+
       <Footer />
-      
+
     </div>
   );
 };
