@@ -37,7 +37,7 @@ export const Navbar = () => {
         isScrolled ? "py-3 bg-background/80 backdrop-blur-md shadow-xs" : "py-5"
       )}
     >
-      <div className="container flex items-center justify-between">
+      <div className="container flex items-center justify-between pr-24 md:pr-4">
         <a
           className="text-xl font-bold text-primary flex items-center"
           href="#hero"
@@ -49,12 +49,12 @@ export const Navbar = () => {
         </a>
 
         {/* desktop nav */}
-        <div className="hidden md:flex space-x-8">
+        <div className="hidden md:flex items-center gap-2 flex-wrap justify-end max-w-[70%]">
           {navItems.map((item, key) => (
             <a
               key={key}
               href={item.href}
-              className="text-foreground/80 hover:text-primary transition-colors duration-300"
+              className="px-4 py-2 rounded-full border border-purple-400/40 bg-purple-500/10 text-foreground/80 backdrop-blur-md shadow-[0_0_0_1px_rgba(255,255,255,0.04)_inset,0_8px_24px_rgba(168,85,247,0.12)] transition-all duration-300 hover:-translate-y-0.5 hover:border-purple-300/60 hover:bg-purple-500/20 hover:text-primary"
             >
               {item.name}
             </a>
