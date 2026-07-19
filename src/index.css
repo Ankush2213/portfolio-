@@ -98,6 +98,39 @@
   body {
     @apply bg-background text-foreground transition-colors duration-300;
     font-feature-settings: "rlig" 1, "calt" 1;
+    position: relative;
+    overflow-x: hidden;
+  }
+
+  body::before {
+    content: "";
+    position: fixed;
+    inset: -20% auto auto -10%;
+    width: 40rem;
+    height: 40rem;
+    border-radius: 9999px;
+    background: radial-gradient(circle, rgba(251, 191, 36, 0.45) 0%, rgba(251, 191, 36, 0.2) 35%, rgba(251, 191, 36, 0.05) 60%, transparent 75%);
+    filter: blur(24px);
+    z-index: 0;
+    pointer-events: none;
+    opacity: 1;
+    animation: glow-pulse 6s ease-in-out infinite;
+  }
+
+  .dark body::before {
+    opacity: 0;
+  }
+}
+
+@keyframes glow-pulse {
+  0%,
+  100% {
+    transform: scale(1);
+    opacity: 0.95;
+  }
+  50% {
+    transform: scale(1.06);
+    opacity: 1;
   }
 }
 
