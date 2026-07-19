@@ -12,38 +12,63 @@ export const ContactSection = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+
+    const form = e.target;
+    const name = form.name.value.trim();
+    const email = form.email.value.trim();
+    const message = form.message.value.trim();
+
+    if (!name || !email || !message) {
+      toast({
+        title: "Please complete the form",
+        description: "Enter your name, email, and a message before sending.",
+        variant: "destructive",
+      });
+      return;
+    }
+
     setIsSubmitting(true);
 
-    emailjs
-      .send(
-        import.meta.env.VITE_EMAILJS_SERVICE_ID,
-        import.meta.env.VITE_EMAILJS_TEMPLATE_ID,
-        {
-          name: e.target.name.value,
-          email: e.target.email.value,
-          message: e.target.message.value,
-        },
-        import.meta.env.VITE_EMAILJS_PUBLIC_KEY
-      )
-      .then(
-        () => {
-          toast({
-            title: "Message sent!",
-            description: "Thank you for your message. I'll get back to you soon.",
-          });
-          setIsSubmitting(false);
-          e.target.reset();
-        },
-        (error) => {
-          toast({
-            title: "Failed to send",
-            description: "Something went wrong. Please try again later.",
-            variant: "destructive",
-          });
-          console.error("EmailJS Error:", error);
-          setIsSubmitting(false);
-        }
+    const serviceId = import.meta.env.VITE_EMAILJS_SERVICE_ID;
+    const templateId = import.meta.env.VITE_EMAILJS_TEMPLATE_ID;
+    const publicKey = import.meta.env.VITE_EMAILJS_PUBLIC_KEY;
+
+    if (!serviceId || !templateId || !publicKey) {
+      const subject = encodeURIComponent(`Portfolio contact from ${name}`);
+      const body = encodeURIComponent(
+        `Name: ${name}\nEmail: ${email}\n\nMessage:\n${message}`
       );
+
+      window.location.href = `mailto:ankush321nayak@gmail.com?subject=${subject}&body=${body}`;
+
+      toast({
+        title: "Email client opened",
+        description: "Your mail app has been opened with your message pre-filled.",
+      });
+      setIsSubmitting(false);
+      form.reset();
+      return;
+    }
+
+    emailjs
+      .send(serviceId, templateId, { name, email, message }, publicKey)
+      .then(() => {
+        toast({
+          title: "Message sent!",
+          description: "Thank you for your message. I'll get back to you soon.",
+        });
+        setIsSubmitting(false);
+        form.reset();
+      })
+      .catch((error) => {
+        toast({
+          title: "Failed to send",
+          description: "Something went wrong. Please try again later.",
+          variant: "destructive",
+        });
+        console.error("EmailJS Error:", error);
+        setIsSubmitting(false);
+      });
   };
 
   return (
